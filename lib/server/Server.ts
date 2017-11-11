@@ -65,8 +65,8 @@ export const startServer = async (db: Schema) => {
     app.get('/instalation', async (req, res) => {
         console.log(req.query);
         const response = await axios.post('https://github.com/login/oauth/access_token', {
-            client_id: 'a4f4fbcec0020ac2d628',
-            client_secret: '6ee152e3adef813a0fb01833574a7b87302b47fd',
+            client_id: 'some id',
+            client_secret: 'some secret',
             code: req.query.code,
         })
         console.log(response.data);
