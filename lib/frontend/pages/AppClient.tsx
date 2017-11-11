@@ -1,0 +1,18 @@
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { LoginPage } from '../components/Login';
+
+declare const window: any;
+
+const initialState = window.INIT_STATE;
+
+ReactDOM.render(
+    <div>WELCOME</div>,
+    document.getElementById('root') as HTMLDivElement
+);
+
+declare var module: any;
+
+if (module.hot) {
+    module.hot.accept();
+}
