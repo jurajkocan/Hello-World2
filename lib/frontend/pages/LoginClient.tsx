@@ -11,7 +11,6 @@ ReactDOM.render(
     document.getElementById('root') as HTMLDivElement
 );
 
-
 declare var module: any;
 
 if (module.hot) {

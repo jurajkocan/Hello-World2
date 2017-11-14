@@ -6,6 +6,11 @@ export const User = t.interface({
     password: t.string
 });
 
+export const LogError = t.interface({
+    error: t.any,
+    description: t.string
+})
+
 export namespace Type {
     export type UserDbType = t.TypeOf<typeof User>;
 }
@@ -13,6 +18,7 @@ export namespace Type {
 export type Schema = Structure<{
     Collections: {
         users: typeof User
+        errors: typeof LogError
     },
     Documents: {
 

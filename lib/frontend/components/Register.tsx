@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, Form, Icon, Input, Button, Alert } from 'antd';
-import { ResponseStatusRegister } from '../../server/Security';
+import { SecurityResponseTypes } from '../../server/response/ResponseTypes';
 
 import { RegistrationStyle } from './RegistrationStyle.style';
 import axios from 'axios';
@@ -28,8 +28,7 @@ class Register extends React.Component<any, RegisterState> {
                 })
                 axios.post('/security/register', values)
                     .then((response) => {
-                        const data = response.data as ResponseStatusRegister;
-                        console.log(data);
+                        const data = response.data as SecurityResponseTypes.responseStatusRegistration;
                         switch (data.status) {
                             case 'email exists':
                                 this.setState({

@@ -1,12 +1,17 @@
 import { endpoint } from './Interface';
-import { GithubGet } from './get';
-import { GithubPost } from './post';
+import { GithubGet } from './Get';
+import { GithubPost, AppPost } from './Post';
 
 export const endpointsV1: endpoint[] = [
     {
         type: 'POST',
         endpointUrl: '/api/v1/git/authenticate',
         endpointFunction: GithubPost.authentication
+    },
+    {
+        type: 'POST',
+        endpointUrl: '/api/v1/app/loginUser',
+        endpointFunction: AppPost.loginUser,
     },
     {
         type: 'GET',

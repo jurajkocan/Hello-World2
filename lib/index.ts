@@ -1,25 +1,11 @@
 import { startServer } from './server/Server';
-import { connectionString } from './Constants';
+import { webConfig } from './WebConfig';
 import { createDB } from './database/Database';
-import { readFileSync } from 'fs';
-
-// import * as GitHub from 'github-api';
-import * as JWT from 'jsonwebtoken';
-import axios from 'axios';
 
 const main = async () => {
-    const db = await createDB(connectionString);
 
+    const db = await createDB(webConfig.databaseConfiguration.connectionString);
     startServer(db);
-    // const pem = await readFileSync('./rep-extension.2017-11-05.private-key.pem');
-    // const payload = {
-    //     iat: 12,
-    //     exp: 12,
-    //     iss: 6446
-    // };
-
-    // var token = JWT.sign(payload, pem, { algorithm: 'RS256' });
-
     // const gh = new GitHub({
     //     token: '7f8dd61dcff2d23650ac2911a814ed8d566730fe'
     // });

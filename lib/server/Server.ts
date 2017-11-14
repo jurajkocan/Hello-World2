@@ -2,7 +2,7 @@ import * as Express from 'express';
 import * as Session from 'express-session';
 import * as BodyParser from 'body-parser';
 import { endpointsV1 } from '../api/Endpoints';
-import { SessionConfiguration } from '../Constants';
+import { webConfig } from '../WebConfig';
 import { renderHtml } from '../frontend/RenderHtml';
 import axios from 'axios';
 
@@ -12,7 +12,8 @@ import { renderLogin } from '../frontend/pages/LoginServer';
 import { renderRegister } from '../frontend/pages/RegisterServer';
 import { renderApp } from '../frontend/pages/AppServer';
 
-import { registerUser, ResponseStatusRegister } from './Security';
+import { registerUser } from './user/User';
+import { responses } from './response/ResponseTypes';
 
 export const startServer = async (db: Schema) => {
     const app = Express();
@@ -36,8 +37,8 @@ export const startServer = async (db: Schema) => {
     app.use(BodyParser.json());
     app.use(Session(
         {
-            secret: SessionConfiguration.SessionSecret,
-            cookie: { maxAge: SessionConfiguration.ExpireLoginSession },
+            secret: webConfig.SessionConfiguration.SessionSecret,
+            cookie: { maxAge: webConfig.SessionConfiguration.ExpireLoginSession },
             saveUninitialized: true,
             resave: true,
         }
@@ -50,7 +51,6 @@ export const startServer = async (db: Schema) => {
     endpointsV1.forEach((endPoint, index) => {
         switch (endPoint.type) {
             case 'GET':
-                console.log(endPoint.endpointUrl);
                 app.get(endPoint.endpointUrl, endPoint.endpointFunction);
                 break;
             case 'POST':
@@ -119,26 +119,29 @@ export const startServer = async (db: Schema) => {
      * @description registration post, if data are correct will create new user in db and report positive response
      */
     app.post('/security/register', async (req, res) => {
-        console.log(req.body);
         if (req.body) {
             if (!req.body.email) {
-                const response: ResponseStatusRegister = {
-                    message: 'email is missing',
-                    status: 'email is missing',
-                    type: 'registration'
-                }
-                res.send(response);
+                res.send(responses.possibleResponsesRegistration.emailMissing);
             }
             if (!req.body.password) {
-                const response: ResponseStatusRegister = {
-                    message: 'password is missing',
-                    status: 'password is missing',
-                    type: 'registration'
-                }
-                res.send(response);
+                res.send(responses.possibleResponsesRegistration.passwordMissing);
             }
-            const response: ResponseStatusRegister = await registerUser(db, req.body.email, req.body.password)
-            res.send(response);
+            const [user, message] = await registerUser(req.body.email, req.body.password)
+            if (user) {
+                res.send(responses.possibleResponsesRegistration.registrationSuccess);
+            } else {
+                switch (message) {
+                    case 'unexpected error':
+                        res.send(responses.possibleResponsesRegistration.unexpectedError);
+                        break;
+                    case 'user already exists':
+                        res.send(responses.possibleResponsesRegistration.emailExists)
+                        break;
+                    case 'user success registered':
+                        res.send(responses.possibleResponsesRegistration.registrationSuccess);
+                        break;
+                }
+            }
             return;
         }
         res.send('bad request');

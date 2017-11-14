@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Card, Form, Icon, Input, Button, Alert } from 'antd';
-import { ResponseStatusLogin } from '../../server/Security';
+import { SecurityResponseTypes } from '../../server/response/ResponseTypes';
 
 import { LoginStyle } from './LoginStyle.style';
 import axios from 'axios';

@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 import { mongoRTWrapper } from 'mongo-iots-wrapper';
-import { Schema, User } from './Schema';
+import { Schema, User, LogError } from './Schema';
 
 /**
  * Create db driver
@@ -12,7 +12,8 @@ export const createDB = async (dbConnect: string): Promise<Schema> => {
         const iotsWrapper = await mongoRTWrapper(
             {
                 Collections: {
-                    users: User
+                    users: User,
+                    errors: LogError
                 },
                 Documents: {
                 }
